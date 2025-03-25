@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>sc</title>
+<link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+	<h1>sc</h1>
+
+	<form th:action="@{/}" method="post" th:object="${buildOrder}">
+		Build Order:
+		<input type="text" th:field="*{order}" name="order" th:value="${buildOrder.order}" placeholder="0,0,[...],0" size="250">
+		<div th:if="${#fields.hasErrors('order')}" th:errors="*{order}">Name Error</div><br>
+		<input type="submit" value="Run Build Order" name="run"><br>
+		<input type="submit" value="Run Best Build Order" name="runBestBuildOrder"><br>
+	</form>
+
+	<span th:text="${error != null} ? ${error}"></span>
+
+	<table>
+		<tr>
+			<th>Land</th>
+			<th>LandInQue</th>
+		</tr>
+		<tr>
+			<td th:text="${gameResult.land}"></td>
+			<td th:text="${gameResult.landInQue}"></td>
+		</tr>
+	</table>
+	
+	<table>
+		<tr>
+			<th style="width:10px">Tick</th>
+			<th style="width:10px">Land</th>
+			<th style="width:360px">Que</th>
+			<th style="width:80px">Land in Que</th>
+			<th style="width:10px">Ordered</th>
+		</tr>
+		<th:block th:each="GameData : ${gameResult.datas}">
+		<tr>
+			<td th:text="${GameData.Tick}"></td>
+			<td th:text="${GameData.Land}"></td>
+			<td th:text="${GameData.QueString}"></td>
+			<td th:text="${GameData.LandInQue}"></td>
+			<td th:text="${GameData.Ordered}"></td>
+		</tr>
+		</th:block>
+	</table>
+
+</body>
+</html>
