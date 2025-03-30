@@ -1,8 +1,9 @@
-package sc.starkingdoms.game;
+package starkingdoms.game;
 
 import java.util.List;
 
-import sc.starkingdoms.model.BuildOrder;
+import starkingdoms.model.BuildOrder;
+
 
 public class GameResult implements Comparable<GameResult> {
 

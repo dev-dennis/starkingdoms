@@ -1,12 +1,12 @@
-package sc.starkingdoms.service;
+package starkingdoms.service;
 
 import org.springframework.stereotype.Service;
 
-import sc.starkingdoms.game.GameResult;
-import sc.starkingdoms.game.OrderException;
-import sc.starkingdoms.game.Strategy;
-import sc.starkingdoms.game.StrategyRequestBuildOrder;
-import sc.starkingdoms.model.BuildOrder;
+import starkingdoms.game.GameResult;
+import starkingdoms.game.OrderException;
+import starkingdoms.game.Strategy;
+import starkingdoms.game.StrategyRequestBuildOrder;
+import starkingdoms.model.BuildOrder;
 
 @Service
 public class SCService {

@@ -1,4 +1,4 @@
-package sc.starkingdoms.game;
+package starkingdoms.game;
 
 public class Game {
 

@@ -1,4 +1,4 @@
-package sc.starkingdoms.game;
+package starkingdoms.game;
 
 import java.util.Arrays;
 

@@ -1,4 +1,4 @@
-package sc.starkingdoms.controller;
+package starkingdoms.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import sc.starkingdoms.game.GameResult;
-import sc.starkingdoms.game.OrderException;
-import sc.starkingdoms.model.BuildOrder;
-import sc.starkingdoms.service.SCService;
+import starkingdoms.game.GameResult;
+import starkingdoms.game.OrderException;
+import starkingdoms.model.BuildOrder;
+import starkingdoms.service.SCService;
 
 @Controller
 @RequestMapping("/")

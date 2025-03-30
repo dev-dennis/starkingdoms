@@ -1,6 +1,6 @@
-package sc.starkingdoms.game;
+package starkingdoms.game;
 
-import sc.starkingdoms.model.BuildOrder;
+import starkingdoms.model.BuildOrder;
 
 public class StrategyRequestBuildOrder extends Strategy {
 

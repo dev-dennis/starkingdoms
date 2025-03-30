@@ -1,4 +1,4 @@
-package sc.starkingdoms;
+package starkingdoms;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

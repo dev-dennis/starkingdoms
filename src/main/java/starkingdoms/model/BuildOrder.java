@@ -1,4 +1,4 @@
-package sc.starkingdoms.model;
+package starkingdoms.model;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
