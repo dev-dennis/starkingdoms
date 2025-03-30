@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>CSV</title>
+<link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+	<div th:insert="~{fragments/navigation::navigation}"></div>
+	<h1>CSV</h1>
+
+	<div>
+		<form method="POST" enctype="multipart/form-data" action="/uploadForm">
+			<table>
+				<tr>
+					<th><input type="file" name="file" /></th>
+					<th><input type="submit" value="Upload" /></th>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<table>
+
+		<tr>
+			<th style="width: 100px">turn</th>
+			<th style="width: 100px">name</th>
+			<th style="width: 100px">type</th>
+			<th style="width: 100px">number</th>
+		</tr>
+
+		<tr th:each="Action : ${actions}">
+			<td th:text="${Action.turn}"></td>
+			<td th:text="${Action.name}"></td>
+			<td th:text="${Action.type}"></td>
+			<td th:text="${Action.number}"></td>
+		</tr>
+
+
+	</table>
+
+</body>
+</html>

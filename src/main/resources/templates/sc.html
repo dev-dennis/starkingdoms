@@ -6,10 +6,10 @@
 <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-
+	<div th:insert="~{fragments/navigation::navigation}"></div>
 	<h1>sc</h1>
 
-	<form th:action="@{/}" method="post" th:object="${buildOrder}">
+	<form th:action="@{/sc}" method="post" th:object="${buildOrder}">
 		Build Order:
 		<input type="text" th:field="*{order}" name="order" th:value="${buildOrder.order}" placeholder="0,0,[...],0" size="250">
 		<div th:if="${#fields.hasErrors('order')}" th:errors="*{order}">Name Error</div><br>
