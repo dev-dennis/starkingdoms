@@ -7,8 +7,6 @@
 </head>
 <body>
 	<div th:insert="~{fragments/navigation::navigation}"></div>
-	<h1>CSV</h1>
-
 	<div>
 		<form method="POST" enctype="multipart/form-data" action="/uploadForm">
 			<table>
@@ -23,17 +21,49 @@
 	<table>
 
 		<tr>
-			<th style="width: 100px">turn</th>
-			<th style="width: 100px">name</th>
-			<th style="width: 100px">type</th>
-			<th style="width: 100px">number</th>
+			<th style="width: 25px">Turn</th>
+			<th style="width: 25px">Till Turn</th>
+			<th style="width: 25px">Exp lore</th>
+			<th style="width: 130px">Train Military</th>
+			<th style="width: 120px">Build</th>
+			<th style="width: 150px">Raze</th>
+			<th style="width: 150px">Assign Scientists</th>
+			<th style="width: 120px">Cancel Research</th>
+			<th style="width: 50px">Change State</th>
 		</tr>
 
-		<tr th:each="Action : ${actions}">
-			<td th:text="${Action.turn}"></td>
-			<td th:text="${Action.name}"></td>
-			<td th:text="${Action.type}"></td>
-			<td th:text="${Action.number}"></td>
+		<tr th:each="Turn : ${turns}">
+			<td th:text="${Turn.number}"></td>
+			<td th:text="${Turn.tillNumber}"></td>
+
+			<td>
+				<div th:each="Explore : ${Turn.exploreList}" th:text="${Explore.number}"></div>
+			</td>
+
+			<td>
+				<div th:each="TrainMilitary : ${Turn.trainMilitaryList}" th:text="${TrainMilitary.type}+':'+${TrainMilitary.number}"></div>
+			</td>
+
+			<td>
+				<div th:each="Build : ${Turn.buildList}" th:text="${Build.type}+':'+${Build.number}"></div>
+			</td>
+
+			<td>
+				<div th:each="Raze : ${Turn.razeList}" th:text="${Raze.type}+':'+${Raze.number}"></div>
+			</td>
+
+			<td>
+				<div th:each="AssignScientists : ${Turn.assignScientistsList}" th:text="${AssignScientists.type}+':'+${AssignScientists.number}"></div>
+			</td>
+
+			<td>
+				<div th:each="CancelResearch : ${Turn.cancelResearchList}" th:text="${CancelResearch.type}"></div>
+			</td>
+
+			<td>
+				<div th:each="ChangeState : ${Turn.changeStateList}" th:text="${ChangeState.type}"></div>
+			</td>
+
 		</tr>
 
 

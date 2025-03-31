@@ -1,14 +1,14 @@
 package starkingdoms.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
-public class Action {
+@Getter
+@Setter
+public abstract class Action {
 
-	private String name;
 	private String type;
 	private int number;
 	private int turn;
+
 }
