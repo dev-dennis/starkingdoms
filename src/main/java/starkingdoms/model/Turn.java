@@ -44,5 +44,14 @@ public class Turn implements Comparable<Turn> {
 		boolean razeListEquals = (this.razeList == null && other.razeList == null) || (this.razeList != null && this.razeList.equals(other.razeList));
 		return trainMilitaryListEquals && buildListEquals && assignScientistsListEquals && cancelResearchListEquals && changeStateListEquals && exploreListEquals && razeListEquals;
 	}
+	
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+	
+	public boolean isMilitaryOnly() {
+		return !trainMilitaryList.isEmpty() && buildList.isEmpty() && assignScientistsList.isEmpty() && cancelResearchList.isEmpty() && changeStateList.isEmpty() && exploreList.isEmpty()  && razeList.isEmpty() ;
+	}
 
 }

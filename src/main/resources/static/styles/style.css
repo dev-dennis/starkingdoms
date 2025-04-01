@@ -4,16 +4,16 @@ body {
 
 .topnav {
 	overflow: hidden;
-	background-color: #fafafa;
+	background-color: rgb(192, 192, 192);
 }
 
 .topnav a {
 	float: left;
 	color: #423d3d;
 	text-align: center;
-	padding: 14px 16px;
+	padding: 5px 5px;
 	text-decoration: none;
-	font-size: 17px;
+	font-size: 15px;
 }
 
 .topnav a:hover {
@@ -57,13 +57,24 @@ footer {
 table {
 	font-family: arial, sans-serif;
 	border-collapse: collapse;
-	font-size: 13px;
+	font-size: 12px;
 }
 
-td, th {
+th {
 	border: 1px solid #dddddd;
 	text-align: left;
 	padding: 0px;
+	border-right: 1px solid #000000;
+	border-left: 1px solid #000000;
+}
+
+td {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 0px;
+	border-right: 1px solid #000000;
+	border-left: 1px solid #000000;
+	vertical-align: text-top;
 }
 
 tr:nth-child(even) {
