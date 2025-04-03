@@ -2,9 +2,9 @@ package starkingdoms.model;
 
 import java.util.List;
 
-public class Explore extends Action {
+public class LevelUpRace extends Action {
 
-	public Explore(List<String> list) {
+	LevelUpRace(List<String> list) {
 
 		super(list);
 	}

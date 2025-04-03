@@ -15,30 +15,37 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import starkingdoms.model.Action;
+import starkingdoms.model.ActionType;
 import starkingdoms.model.AssignScientists;
 import starkingdoms.model.Build;
 import starkingdoms.model.CancelResearch;
 import starkingdoms.model.ChangeState;
 import starkingdoms.model.Explore;
+import starkingdoms.model.LevelUpRace;
 import starkingdoms.model.Raze;
 import starkingdoms.model.TrainMilitary;
 import starkingdoms.model.Turn;
 
 @Controller
+@SessionAttributes("turns")
 public class FileUploadController {
 
-	private static final String COMMADELIMITER = ",";
+	private static final String UPLOAD_FORM = "uploadForm";
+	private static final String ANSICHT = "ansicht";
+	private static final String DELIMITER = ",";
 
 	@GetMapping("/uploadForm")
-	public String listUploadedFiles(Model model) throws IOException {
+	public String listUploadedFiles(Model model) {
 
-		return "uploadForm";
+		return UPLOAD_FORM;
 	}
 
-	@PostMapping("/uploadForm")
+	@PostMapping(value = "/uploadForm", params = "upload")
 	public String handleFileUpload(MultipartFile file, Model model) {
 
 		List<List<String>> records = parse(file);
@@ -48,7 +55,32 @@ public class FileUploadController {
 		List<Turn> compressedTurns = compress(turns);
 
 		model.addAttribute("turns", compressedTurns);
-		return "uploadForm";
+		model.addAttribute(ANSICHT, "other");
+		return UPLOAD_FORM;
+	}
+
+	@PostMapping(value = "/uploadForm", params = "clear")
+	public String clear(MultipartFile file, Model model, SessionStatus status) {
+
+		status.setComplete();
+
+		return UPLOAD_FORM;
+	}
+
+	@PostMapping(value = "/ansicht", params = "columns")
+	public String handleColumns(Model model) {
+
+		model.addAttribute(ANSICHT, "columns");
+
+		return UPLOAD_FORM;
+	}
+
+	@PostMapping(value = "/ansicht", params = "other")
+	public String handleOther(Model model) {
+
+		model.addAttribute(ANSICHT, "other");
+
+		return UPLOAD_FORM;
 	}
 
 	private List<Turn> mapToTurns(List<Action> actions) {
@@ -62,59 +94,43 @@ public class FileUploadController {
 			turn.setNumber(entry.getKey());
 
 			List<Action> list = entry.getValue();
+			turn.setAssignScientistsList(filterByType(list, AssignScientists.class));
+			turn.setBuildList(filterByType(list, Build.class));
+			turn.setCancelResearchList(filterByType(list, CancelResearch.class));
+			turn.setChangeStateList(filterByType(list, ChangeState.class));
+			turn.setExploreList(filterByType(list, Explore.class));
+			turn.setRazeList(filterByType(list, Raze.class));
+			turn.setTrainMilitaryList(filterByType(list, TrainMilitary.class));
+			turn.setLevelUpRaceList(filterByType(list, LevelUpRace.class));
 
-			ArrayList<AssignScientists> assignScientistslist = new ArrayList<>(list.stream().filter(AssignScientists.class::isInstance).map(AssignScientists.class::cast).toList());
-			Collections.sort(assignScientistslist);
-			turn.setAssignScientistsList(assignScientistslist);
-
-			ArrayList<Build> buildList = new ArrayList<>(list.stream().filter(Build.class::isInstance).map(Build.class::cast).toList());
-			Collections.sort(buildList);
-			turn.setBuildList(buildList);
-
-			ArrayList<CancelResearch> cancelResearchList = new ArrayList<>(list.stream().filter(CancelResearch.class::isInstance).map(CancelResearch.class::cast).toList());
-			Collections.sort(cancelResearchList);
-			turn.setCancelResearchList(cancelResearchList);
-
-			ArrayList<ChangeState> changeStateList = new ArrayList<>(list.stream().filter(ChangeState.class::isInstance).map(ChangeState.class::cast).toList());
-			Collections.sort(changeStateList);
-			turn.setChangeStateList(changeStateList);
-
-			ArrayList<Explore> exploreList = new ArrayList<>(list.stream().filter(Explore.class::isInstance).map(Explore.class::cast).toList());
-			Collections.sort(exploreList);
-			turn.setExploreList(exploreList);
-
-			ArrayList<Raze> razeList = new ArrayList<>(list.stream().filter(Raze.class::isInstance).map(Raze.class::cast).toList());
-			Collections.sort(razeList);
-			turn.setRazeList(razeList);
-
-			ArrayList<TrainMilitary> trainMilitaryList = new ArrayList<>(list.stream().filter(TrainMilitary.class::isInstance).map(TrainMilitary.class::cast).toList());
-			Collections.sort(trainMilitaryList);
-			turn.setTrainMilitaryList(trainMilitaryList);
+			List<Action> otherActionsList = new ArrayList<>();
+			otherActionsList.addAll(turn.getAssignScientistsList());
+			otherActionsList.addAll(turn.getBuildList());
+			otherActionsList.addAll(turn.getCancelResearchList());
+			otherActionsList.addAll(turn.getChangeStateList());
+			otherActionsList.addAll(turn.getRazeList());
+			otherActionsList.addAll(turn.getLevelUpRaceList());
+			Collections.sort(otherActionsList);
+			turn.setOtherActionsList(otherActionsList);
 
 			turns.add(turn);
 		}
 		return turns;
 	}
 
+	private <T extends Action> ArrayList<T> filterByType(List<Action> list, Class<T> className) {
+
+		ArrayList<T> arrayList = new ArrayList<>(list.stream().filter(className::isInstance).map(className::cast).toList());
+		Collections.sort(arrayList);
+		return arrayList;
+	}
+
 	private List<Action> mapToActions(List<List<String>> records) {
 
 		List<Action> actions = new ArrayList<>();
 		for (List<String> list : records) {
-			if (list.get(2).equals("Train Military")) {
-				actions.add(newTrainMilitary(list));
-			} else if (list.get(2).equals("Raze")) {
-				actions.add(newRaze(list));
-			} else if (list.get(2).equals("Change State")) {
-				actions.add(newChangeState(list));
-			} else if (list.get(2).equals("Explore")) {
-				actions.add(newExplore(list));
-			} else if (list.get(2).equals("Build")) {
-				actions.add(newBuild(list));
-			} else if (list.get(2).equals("Assign Scientists")) {
-				actions.add(newAssignScientists(list));
-			} else if (list.get(2).equals("Cancel Research")) {
-				actions.add(newCancelResearch(list));
-			}
+			String name = list.get(2);
+			actions.add(ActionType.fromString(name).createAction(list));
 		}
 		return actions;
 	}
@@ -127,7 +143,7 @@ public class FileUploadController {
 			String line;
 			while ((line = br.readLine()) != null) {
 				counter++;
-				String[] values = line.split(COMMADELIMITER, -1);
+				String[] values = line.split(DELIMITER, -1);
 				List<String> asList = Arrays.asList(values);
 				ArrayList<String> arrayList = new ArrayList<>(asList);
 				String valueOf = String.valueOf(counter);
@@ -155,13 +171,15 @@ public class FileUploadController {
 				currentTurn = null;
 			} else if (currentTurn == null && turn.isMilitaryOnly()) {
 				currentTurn = turn;
+			} else if (currentTurn != null && turn.isMilitaryOnly() && !haveSameMilitaryTypes(currentTurn, turn)) {
+				results.add(currentTurn);
+				currentTurn = turn;
 			} else if (currentTurn != null && turn.isMilitaryOnly() && haveSameMilitaryTypes(currentTurn, turn)) {
 				compressTurns(currentTurn, turn);
 			} else {
-				// turn.isMilitaryOnly() && !haveSameMilitaryTypes(currentTurn, turn)
-				results.add(currentTurn);
-				currentTurn = turn;
+				throw new IllegalArgumentException("Error compressingt turn: " + turn.getNumber());
 			}
+
 		}
 		return results;
 	}
@@ -178,15 +196,15 @@ public class FileUploadController {
 	private void compressTurns(Turn currentTurn, Turn turn) {
 
 		currentTurn.setTillNumber(turn.getNumber());
-		
-		compressMilitaryofType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), "Soldiers");
-		compressMilitaryofType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), "Laser Dragoons");
-		compressMilitaryofType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), "Fighters");
-		compressMilitaryofType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), "Scientists");
+
+		compressMilitaryOfType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), TrainMilitary.SOLDIERS);
+		compressMilitaryOfType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), TrainMilitary.LASER_DRAGOONS);
+		compressMilitaryOfType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), TrainMilitary.FIGHTERS);
+		compressMilitaryOfType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), TrainMilitary.SCIENTISTS);
 
 	}
 
-	private void compressMilitaryofType(List<TrainMilitary> trainMilitaryList, List<TrainMilitary> trainMilitaryList2, String type) {
+	private void compressMilitaryOfType(List<TrainMilitary> trainMilitaryList, List<TrainMilitary> trainMilitaryList2, String type) {
 
 		List<TrainMilitary> currentTurnSoldierslist = trainMilitaryList.stream().filter(m -> m.getType().equals(type)).toList();
 		List<TrainMilitary> turnSoldierslist = trainMilitaryList2.stream().filter(m -> m.getType().equals(type)).toList();
@@ -197,73 +215,6 @@ public class FileUploadController {
 			trainMilitary.setNumber(newNumber);
 			trainMilitaryList.add(trainMilitary);
 		}
-	}
-
-	private Action newCancelResearch(List<String> list) {
-
-		CancelResearch action = new CancelResearch();
-		action.setType(list.get(3).trim());
-		action.setTurn(Integer.valueOf(list.get(1)));
-		action.setLine(Integer.valueOf(list.get(5)));
-		return action;
-	}
-
-	private Action newAssignScientists(List<String> list) {
-
-		AssignScientists action = new AssignScientists();
-		action.setType(list.get(3).trim());
-		action.setNumber(list.get(4));
-		action.setTurn(Integer.valueOf(list.get(1)));
-		action.setLine(Integer.valueOf(list.get(5)));
-		return action;
-	}
-
-	private Action newBuild(List<String> list) {
-
-		Build action = new Build();
-		action.setType(list.get(3));
-		action.setNumber(list.get(4));
-		action.setTurn(Integer.valueOf(list.get(1)));
-		action.setLine(Integer.valueOf(list.get(5)));
-		return action;
-	}
-
-	private Action newExplore(List<String> list) {
-
-		Explore action = new Explore();
-		action.setNumber(list.get(4));
-		action.setTurn(Integer.valueOf(list.get(1)));
-		action.setLine(Integer.valueOf(list.get(5)));
-		return action;
-	}
-
-	private Action newChangeState(List<String> list) {
-
-		ChangeState action = new ChangeState();
-		action.setType(list.get(3));
-		action.setTurn(Integer.valueOf(list.get(1)));
-		action.setLine(Integer.valueOf(list.get(5)));
-		return action;
-	}
-
-	private Action newRaze(List<String> list) {
-
-		Raze action = new Raze();
-		action.setType(list.get(3));
-		action.setNumber(list.get(4));
-		action.setTurn(Integer.valueOf(list.get(1)));
-		action.setLine(Integer.valueOf(list.get(5)));
-		return action;
-	}
-
-	private Action newTrainMilitary(List<String> list) {
-
-		TrainMilitary action = new TrainMilitary();
-		action.setType(list.get(3));
-		action.setNumber(list.get(4));
-		action.setTurn(Integer.valueOf(list.get(1)));
-		action.setLine(Integer.valueOf(list.get(5)));
-		return action;
 	}
 
 }

@@ -6,68 +6,37 @@
 <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
+
 	<div th:insert="~{fragments/navigation::navigation}"></div>
+
 	<div>
 		<form method="POST" enctype="multipart/form-data" action="/uploadForm">
 			<table>
 				<tr>
 					<th><input type="file" name="file" /></th>
-					<th><input type="submit" value="Upload" /></th>
+					<th><input type="submit" name="upload" value="Upload" /></th>
+					<th><input type="submit" name="clear" value="Clear" /></th>
 				</tr>
 			</table>
 		</form>
 	</div>
 
-	<table>
+	<div>
+		<form method="POST" action="/ansicht">
+			<table>
+				<tr>
+					<th>Ansicht:</th>
+					<th><input type="submit" name="other" value="Other" /></th>
+					<th><input type="submit" name="columns" value="Columns" /></th>
+				</tr>
+			</table>
+		</form>
+	</div>
 
-		<tr>
-			<th style="width: 30px">Turn</th>
-			<th style="width: 30px">Till</th>
-			<th style="width: 30px">Expl.</th>
-			<th style="width: 200px">Train Military</th>
-			<th style="width: 160px">Raze</th>
-			<th style="width: 160px">Build</th>
-			<th style="width: 160px">Assign Scientists</th>
-			<th style="width: 160px">Cancel Research</th>
-			<th style="width: 160px">Change State</th>
-		</tr>
-
-		<tr th:each="Turn : ${turns}">
-			<td th:text="${Turn.number}"></td>
-			<td th:text="${Turn.tillNumber}"></td>
-
-			<td>
-				<div th:each="Explore : ${Turn.exploreList}" th:text="${Explore.number}"></div>
-			</td>
-
-			<td>
-				<div th:each="TrainMilitary : ${Turn.trainMilitaryList}" th:text="${TrainMilitary.type}+':'+${TrainMilitary.number}"></div>
-			</td>
-
-			<td>
-				<div th:each="Raze : ${Turn.razeList}" th:text="${Raze.line}+')'+${Raze.type}+':'+${Raze.number}"></div>
-			</td>
-
-			<td>
-				<div th:each="Build : ${Turn.buildList}" th:text="${Build.line}+')'+${Build.type}+':'+${Build.number}"></div>
-			</td>
-
-			<td>
-				<div th:each="AssignScientists : ${Turn.assignScientistsList}" th:text="${AssignScientists.line}+')'+${AssignScientists.type}+':'+${AssignScientists.number}"></div>
-			</td>
-
-			<td>
-				<div th:each="CancelResearch : ${Turn.cancelResearchList}" th:text="${CancelResearch.line}+')'+${CancelResearch.type}"></div>
-			</td>
-
-			<td>
-				<div th:each="ChangeState : ${Turn.changeStateList}" th:text="${ChangeState.line}+')'+${ChangeState.type}"></div>
-			</td>
-
-		</tr>
+	<div th:if="${ansicht == 'other'}" th:insert="~{fragments/turntableother::turntableother}"></div>
+	<div th:if="${ansicht == 'columns'}" th:insert="~{fragments/turntable::turntable}"></div>
 
 
-	</table>
 
 </body>
 </html>

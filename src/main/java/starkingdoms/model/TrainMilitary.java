@@ -1,19 +1,17 @@
 package starkingdoms.model;
 
+import java.util.List;
+
 public class TrainMilitary extends Action {
 
-//	@Override
-//	public boolean equals(Object o) {
-//
-//		if (o == this) {
-//			return true;
-//		}
-//		if (!(o instanceof TrainMilitary)) {
-//			return false;
-//		}
-//		TrainMilitary other = (TrainMilitary) o;
-//		boolean typeEquals = (this.getType() == null && other.getType() == null) || (this.getType() != null && this.getType().equals(other.getType()));
-//		boolean numberEquals = this.getNumber() == (other.getNumber());
-//		return typeEquals && numberEquals;
-//	}
+	public TrainMilitary(List<String> list) {
+
+		super(list);
+	}
+
+	public static final String SCIENTISTS = "Scientists";
+	public static final String FIGHTERS = "Fighters";
+	public static final String LASER_DRAGOONS = "Laser Dragoons";
+	public static final String SOLDIERS = "Soldiers";
+
 }

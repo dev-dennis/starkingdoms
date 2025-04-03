@@ -1,5 +1,7 @@
 package starkingdoms.model;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +14,18 @@ public abstract class Action implements Comparable<Action> {
 	private int turn;
 	private Integer line;
 
+	Action(List<String> list) {
+
+		if (list.size() != 6) {
+			throw new IllegalArgumentException();
+		}
+
+		setTurn(Integer.valueOf(list.get(1)));
+		setType(list.get(3).trim());
+		setNumber(list.get(4));
+		setLine(Integer.valueOf(list.get(5)));
+	}
+
 	@Override
 	public int compareTo(Action pAction) {
 
@@ -19,20 +33,14 @@ public abstract class Action implements Comparable<Action> {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(Object obj) {
 
-		if (o == this) {
-			return true;
-		}
-		if (!(o instanceof Action)) {
-			return false;
-		}
-		Action other = (Action) o;
-		return (this.line == null && other.line == null) || (this.line != null && this.line.equals(other.line));
+		return super.equals(obj);
 	}
-	
+
 	@Override
 	public int hashCode() {
+
 		return super.hashCode();
 	}
 

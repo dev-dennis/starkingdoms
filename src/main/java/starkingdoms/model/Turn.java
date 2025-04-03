@@ -18,6 +18,8 @@ public class Turn implements Comparable<Turn> {
 	List<ChangeState> changeStateList;
 	List<Explore> exploreList;
 	List<Raze> razeList;
+	List<LevelUpRace> levelUpRaceList;
+	List<Action> otherActionsList;
 
 	@Override
 	public int compareTo(Turn pTurn) {
@@ -26,32 +28,21 @@ public class Turn implements Comparable<Turn> {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(Object obj) {
 
-		if (o == this) {
-			return true;
-		}
-		if (!(o instanceof Turn)) {
-			return false;
-		}
-		Turn other = (Turn) o;
-		boolean trainMilitaryListEquals = (this.trainMilitaryList == null && other.trainMilitaryList == null) || (this.trainMilitaryList != null && this.trainMilitaryList.equals(other.trainMilitaryList));
-		boolean buildListEquals = (this.buildList == null && other.buildList == null) || (this.buildList != null && this.buildList.equals(other.buildList));
-		boolean assignScientistsListEquals = (this.assignScientistsList == null && other.assignScientistsList == null) || (this.assignScientistsList != null && this.assignScientistsList.equals(other.assignScientistsList));
-		boolean cancelResearchListEquals = (this.cancelResearchList == null && other.cancelResearchList == null) || (this.cancelResearchList != null && this.cancelResearchList.equals(other.cancelResearchList));
-		boolean changeStateListEquals = (this.changeStateList == null && other.changeStateList == null) || (this.changeStateList != null && this.changeStateList.equals(other.changeStateList));
-		boolean exploreListEquals = (this.exploreList == null && other.exploreList == null) || (this.exploreList != null && this.exploreList.equals(other.exploreList));
-		boolean razeListEquals = (this.razeList == null && other.razeList == null) || (this.razeList != null && this.razeList.equals(other.razeList));
-		return trainMilitaryListEquals && buildListEquals && assignScientistsListEquals && cancelResearchListEquals && changeStateListEquals && exploreListEquals && razeListEquals;
+		return super.equals(obj);
 	}
-	
+
 	@Override
 	public int hashCode() {
+
 		return super.hashCode();
 	}
-	
+
 	public boolean isMilitaryOnly() {
-		return !trainMilitaryList.isEmpty() && buildList.isEmpty() && assignScientistsList.isEmpty() && cancelResearchList.isEmpty() && changeStateList.isEmpty() && exploreList.isEmpty()  && razeList.isEmpty() ;
+
+		return !trainMilitaryList.isEmpty() && buildList.isEmpty() && assignScientistsList.isEmpty() && cancelResearchList.isEmpty() && changeStateList.isEmpty() && exploreList.isEmpty()
+				&& razeList.isEmpty();
 	}
 
 }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+
+<table th:fragment="turntableother">
+
+	<tr>
+		<th style="width: 30px">Turn</th>
+		<th style="width: 30px">Till</th>
+		<th style="width: 30px">Expl.</th>
+		<th style="width: 200px">Train Military</th>
+		<th style="width: 500px">Other Actions</th>
+	</tr>
+
+	<tr th:each="Turn : ${turns}">
+
+		<td th:text="${Turn.number}"></td>
+
+		<td th:text="${Turn.tillNumber}"></td>
+
+		<td>
+			<div th:each="Explore : ${Turn.exploreList}" th:text="${Explore.number}"></div>
+		</td>
+
+		<td>
+			<div th:each="TrainMilitary : ${Turn.trainMilitaryList}" th:text="${TrainMilitary.type}+':'+${TrainMilitary.number}"></div>
+		</td>
+
+		<td><span th:each="Action : ${Turn.otherActionsList}" th:text="${Action.line}+')'+${Action.type}+':'+${Action.number}+' '"></span></td>
+
+	</tr>
+
+</table>
+
+</html>
