@@ -25,6 +25,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.SC_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: target/my-jar-file.jar
-        asset_name: my-jar-file.jar
+        asset_path: target/starkingdoms-2.0.0-SNAPSHOT.jar
+        asset_name: starkingdoms-2.0.0-SNAPSHOT.jar
         asset_content_type: application/java-archive
