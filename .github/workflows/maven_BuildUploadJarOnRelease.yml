@@ -23,10 +23,7 @@ jobs:
 
     - name: Upload JAR to Release
       uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.SC_TOKEN }}
       with:
-        token:  ${{ secrets.SC_TOKEN }}
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: target/my-jar-file.jar
         asset_name: my-jar-file.jar
