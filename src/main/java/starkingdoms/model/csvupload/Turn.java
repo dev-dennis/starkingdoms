@@ -1,5 +1,6 @@
-package starkingdoms.model;
+package starkingdoms.model.csvupload;
 
+import java.util.HashSet;
 import java.util.List;
 
 import lombok.Getter;
@@ -43,6 +44,15 @@ public class Turn implements Comparable<Turn> {
 
 		return !trainMilitaryList.isEmpty() && buildList.isEmpty() && assignScientistsList.isEmpty() && cancelResearchList.isEmpty() && changeStateList.isEmpty() && exploreList.isEmpty()
 				&& razeList.isEmpty();
+	}
+
+	public boolean equalsMilitaryTypes(Turn turn) {
+
+		List<String> currentTurnTypes = this.getTrainMilitaryList().stream().map(Action::getType).toList();
+		HashSet<String> currentTurnTypesSet = new HashSet<>(currentTurnTypes);
+		List<String> turnTypes = turn.getTrainMilitaryList().stream().map(Action::getType).toList();
+		HashSet<String> turnTypesSet = new HashSet<>(turnTypes);
+		return currentTurnTypesSet.equals(turnTypesSet);
 	}
 
 }

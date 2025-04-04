@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,21 +18,22 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import starkingdoms.model.Action;
-import starkingdoms.model.ActionType;
-import starkingdoms.model.AssignScientists;
-import starkingdoms.model.Build;
-import starkingdoms.model.CancelResearch;
-import starkingdoms.model.ChangeState;
-import starkingdoms.model.Explore;
-import starkingdoms.model.LevelUpRace;
-import starkingdoms.model.Raze;
-import starkingdoms.model.TrainMilitary;
-import starkingdoms.model.Turn;
+import starkingdoms.model.csvupload.Action;
+import starkingdoms.model.csvupload.AssignScientists;
+import starkingdoms.model.csvupload.Build;
+import starkingdoms.model.csvupload.CancelResearch;
+import starkingdoms.model.csvupload.ChangeState;
+import starkingdoms.model.csvupload.Explore;
+import starkingdoms.model.csvupload.LevelUpRace;
+import starkingdoms.model.csvupload.Raze;
+import starkingdoms.model.csvupload.TrainMilitary;
+import starkingdoms.model.csvupload.Turn;
+import starkingdoms.types.ActionType;
+import starkingdoms.types.TrainMilitaryType;
 
 @Controller
 @SessionAttributes("turns")
-public class FileUploadController {
+public class CSVUploadController {
 
 	private static final String UPLOAD_FORM = "uploadForm";
 	private static final String ANSICHT = "ansicht";
@@ -102,20 +102,24 @@ public class FileUploadController {
 			turn.setRazeList(filterByType(list, Raze.class));
 			turn.setTrainMilitaryList(filterByType(list, TrainMilitary.class));
 			turn.setLevelUpRaceList(filterByType(list, LevelUpRace.class));
-
-			List<Action> otherActionsList = new ArrayList<>();
-			otherActionsList.addAll(turn.getAssignScientistsList());
-			otherActionsList.addAll(turn.getBuildList());
-			otherActionsList.addAll(turn.getCancelResearchList());
-			otherActionsList.addAll(turn.getChangeStateList());
-			otherActionsList.addAll(turn.getRazeList());
-			otherActionsList.addAll(turn.getLevelUpRaceList());
-			Collections.sort(otherActionsList);
-			turn.setOtherActionsList(otherActionsList);
+			createOtherActions(turn);
 
 			turns.add(turn);
 		}
 		return turns;
+	}
+
+	private void createOtherActions(Turn turn) {
+
+		List<Action> otherActionsList = new ArrayList<>();
+		otherActionsList.addAll(turn.getAssignScientistsList());
+		otherActionsList.addAll(turn.getBuildList());
+		otherActionsList.addAll(turn.getCancelResearchList());
+		otherActionsList.addAll(turn.getChangeStateList());
+		otherActionsList.addAll(turn.getRazeList());
+		otherActionsList.addAll(turn.getLevelUpRaceList());
+		Collections.sort(otherActionsList);
+		turn.setOtherActionsList(otherActionsList);
 	}
 
 	private <T extends Action> ArrayList<T> filterByType(List<Action> list, Class<T> className) {
@@ -171,10 +175,10 @@ public class FileUploadController {
 				currentTurn = null;
 			} else if (currentTurn == null && turn.isMilitaryOnly()) {
 				currentTurn = turn;
-			} else if (currentTurn != null && turn.isMilitaryOnly() && !haveSameMilitaryTypes(currentTurn, turn)) {
+			} else if (currentTurn != null && turn.isMilitaryOnly() && !currentTurn.equalsMilitaryTypes(turn)) {
 				results.add(currentTurn);
 				currentTurn = turn;
-			} else if (currentTurn != null && turn.isMilitaryOnly() && haveSameMilitaryTypes(currentTurn, turn)) {
+			} else if (currentTurn != null && turn.isMilitaryOnly() && currentTurn.equalsMilitaryTypes(turn)) {
 				compressTurns(currentTurn, turn);
 			} else {
 				throw new IllegalArgumentException("Error compressingt turn: " + turn.getNumber());
@@ -184,30 +188,19 @@ public class FileUploadController {
 		return results;
 	}
 
-	private boolean haveSameMilitaryTypes(Turn currentTurn, Turn turn) {
-
-		List<String> currentTurnTypes = currentTurn.getTrainMilitaryList().stream().map(Action::getType).toList();
-		HashSet<String> currentTurnTypesSet = new HashSet<>(currentTurnTypes);
-		List<String> turnTypes = turn.getTrainMilitaryList().stream().map(Action::getType).toList();
-		HashSet<String> turnTypesSet = new HashSet<>(turnTypes);
-		return currentTurnTypesSet.equals(turnTypesSet);
-	}
-
 	private void compressTurns(Turn currentTurn, Turn turn) {
 
 		currentTurn.setTillNumber(turn.getNumber());
-
-		compressMilitaryOfType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), TrainMilitary.SOLDIERS);
-		compressMilitaryOfType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), TrainMilitary.LASER_DRAGOONS);
-		compressMilitaryOfType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), TrainMilitary.FIGHTERS);
-		compressMilitaryOfType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), TrainMilitary.SCIENTISTS);
+		for (TrainMilitaryType type : TrainMilitaryType.values()) {
+			compressMilitaryOfType(currentTurn.getTrainMilitaryList(), turn.getTrainMilitaryList(), type);
+		}
 
 	}
 
-	private void compressMilitaryOfType(List<TrainMilitary> trainMilitaryList, List<TrainMilitary> trainMilitaryList2, String type) {
+	private void compressMilitaryOfType(List<TrainMilitary> trainMilitaryList, List<TrainMilitary> trainMilitaryList2, TrainMilitaryType type) {
 
-		List<TrainMilitary> currentTurnSoldierslist = trainMilitaryList.stream().filter(m -> m.getType().equals(type)).toList();
-		List<TrainMilitary> turnSoldierslist = trainMilitaryList2.stream().filter(m -> m.getType().equals(type)).toList();
+		List<TrainMilitary> currentTurnSoldierslist = trainMilitaryList.stream().filter(m -> m.getType().equals(type.getType())).toList();
+		List<TrainMilitary> turnSoldierslist = trainMilitaryList2.stream().filter(m -> m.getType().equals(type.getType())).toList();
 		if (currentTurnSoldierslist.size() == 1 && currentTurnSoldierslist.size() == turnSoldierslist.size()) {
 			TrainMilitary trainMilitary = currentTurnSoldierslist.get(0);
 			trainMilitaryList.remove(trainMilitary);

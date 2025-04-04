@@ -12,17 +12,17 @@ import lombok.RequiredArgsConstructor;
 import starkingdoms.game.GameResult;
 import starkingdoms.game.OrderException;
 import starkingdoms.model.BuildOrder;
-import starkingdoms.service.SCService;
+import starkingdoms.service.BuildOrderService;
 
 @Controller
 @RequiredArgsConstructor
-public class SCController {
+public class BuildOrderController {
 
 	private static final String BUILD_ORDER = "buildOrder";
 
 	private static final String GAME_RESULT = "gameResult";
 
-	private final SCService sCService;
+	private final BuildOrderService sCService;
 
 	@GetMapping("/sc")
 	public String getBO(Model model) {

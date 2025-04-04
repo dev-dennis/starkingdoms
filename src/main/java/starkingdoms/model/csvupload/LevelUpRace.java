@@ -1,10 +1,10 @@
-package starkingdoms.model;
+package starkingdoms.model.csvupload;
 
 import java.util.List;
 
 public class LevelUpRace extends Action {
 
-	LevelUpRace(List<String> list) {
+	public LevelUpRace(List<String> list) {
 
 		super(list);
 	}

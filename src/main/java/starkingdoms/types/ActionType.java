@@ -1,6 +1,16 @@
-package starkingdoms.model;
+package starkingdoms.types;
 
 import java.util.List;
+
+import starkingdoms.model.csvupload.Action;
+import starkingdoms.model.csvupload.AssignScientists;
+import starkingdoms.model.csvupload.Build;
+import starkingdoms.model.csvupload.CancelResearch;
+import starkingdoms.model.csvupload.ChangeState;
+import starkingdoms.model.csvupload.Explore;
+import starkingdoms.model.csvupload.LevelUpRace;
+import starkingdoms.model.csvupload.Raze;
+import starkingdoms.model.csvupload.TrainMilitary;
 
 public enum ActionType {
 
@@ -11,6 +21,7 @@ public enum ActionType {
 			return new CancelResearch(list);
 		}
 	},
+
 	BUILD {
 		@Override
 		public Action createAction(List<String> list) {
@@ -18,6 +29,7 @@ public enum ActionType {
 			return new Build(list);
 		}
 	},
+
 	EXPLORE {
 		@Override
 		public Action createAction(List<String> list) {
@@ -25,6 +37,7 @@ public enum ActionType {
 			return new Explore(list);
 		}
 	},
+
 	CHANGE_STATE {
 		@Override
 		public Action createAction(List<String> list) {
@@ -32,6 +45,7 @@ public enum ActionType {
 			return new ChangeState(list);
 		}
 	},
+
 	RAZE {
 		@Override
 		public Action createAction(List<String> list) {
@@ -39,6 +53,7 @@ public enum ActionType {
 			return new Raze(list);
 		}
 	},
+
 	TRAIN_MILITARY {
 		@Override
 		public Action createAction(List<String> list) {
@@ -46,6 +61,7 @@ public enum ActionType {
 			return new TrainMilitary(list);
 		}
 	},
+
 	ASSIGN_SCIENTISTS {
 
 		@Override
@@ -54,6 +70,7 @@ public enum ActionType {
 			return new AssignScientists(list);
 		}
 	},
+
 	LEVEL_UP_RACE {
 
 		@Override

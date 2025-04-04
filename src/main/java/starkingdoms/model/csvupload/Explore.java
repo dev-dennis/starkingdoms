@@ -1,4 +1,4 @@
-package starkingdoms.model;
+package starkingdoms.model.csvupload;
 
 import java.util.List;
 
