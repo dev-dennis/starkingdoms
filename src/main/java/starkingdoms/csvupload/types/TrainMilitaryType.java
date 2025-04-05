@@ -1,4 +1,4 @@
-package starkingdoms.types;
+package starkingdoms.csvupload.types;
 
 public enum TrainMilitaryType {
 

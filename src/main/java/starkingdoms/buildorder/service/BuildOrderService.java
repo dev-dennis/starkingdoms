@@ -1,12 +1,12 @@
-package starkingdoms.service;
+package starkingdoms.buildorder.service;
 
 import org.springframework.stereotype.Service;
 
-import starkingdoms.game.GameResult;
-import starkingdoms.game.OrderException;
-import starkingdoms.game.Strategy;
-import starkingdoms.game.StrategyRequestBuildOrder;
-import starkingdoms.model.BuildOrder;
+import starkingdoms.buildorder.game.GameResult;
+import starkingdoms.buildorder.game.OrderException;
+import starkingdoms.buildorder.game.Strategy;
+import starkingdoms.buildorder.game.StrategyRequestBuildOrder;
+import starkingdoms.buildorder.model.BuildOrder;
 
 @Service
 public class BuildOrderService {

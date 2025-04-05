@@ -1,4 +1,4 @@
-package starkingdoms.controller;
+package starkingdoms.buildorder.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import starkingdoms.game.GameResult;
-import starkingdoms.game.OrderException;
-import starkingdoms.model.BuildOrder;
-import starkingdoms.service.BuildOrderService;
+import starkingdoms.buildorder.game.GameResult;
+import starkingdoms.buildorder.game.OrderException;
+import starkingdoms.buildorder.model.BuildOrder;
+import starkingdoms.buildorder.service.BuildOrderService;
 
 @Controller
 @RequiredArgsConstructor

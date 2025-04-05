@@ -1,4 +1,4 @@
-package starkingdoms.controller;
+package starkingdoms.csvupload.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,18 +18,18 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import starkingdoms.model.csvupload.Action;
-import starkingdoms.model.csvupload.AssignScientists;
-import starkingdoms.model.csvupload.Build;
-import starkingdoms.model.csvupload.CancelResearch;
-import starkingdoms.model.csvupload.ChangeState;
-import starkingdoms.model.csvupload.Explore;
-import starkingdoms.model.csvupload.LevelUpRace;
-import starkingdoms.model.csvupload.Raze;
-import starkingdoms.model.csvupload.TrainMilitary;
-import starkingdoms.model.csvupload.Turn;
-import starkingdoms.types.ActionType;
-import starkingdoms.types.TrainMilitaryType;
+import starkingdoms.csvupload.model.Action;
+import starkingdoms.csvupload.model.AssignScientists;
+import starkingdoms.csvupload.model.Build;
+import starkingdoms.csvupload.model.CancelResearch;
+import starkingdoms.csvupload.model.ChangeState;
+import starkingdoms.csvupload.model.Explore;
+import starkingdoms.csvupload.model.LevelUpRace;
+import starkingdoms.csvupload.model.Raze;
+import starkingdoms.csvupload.model.TrainMilitary;
+import starkingdoms.csvupload.model.Turn;
+import starkingdoms.csvupload.types.ActionType;
+import starkingdoms.csvupload.types.TrainMilitaryType;
 
 @Controller
 @SessionAttributes("turns")
