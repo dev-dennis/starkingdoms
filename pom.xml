@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>sc</groupId>
 	<artifactId>starkingdoms</artifactId>
-	<version>2.0.0</version>
+	<version>3.0.0</version>
 	<name>starkingdoms</name>
 	<description>Spring Boot application for starkingdoms</description>
 	<url/>
