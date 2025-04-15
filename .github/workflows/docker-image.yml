@@ -24,7 +24,7 @@ jobs:
 
       # Step 3: Build the Docker image
       - name: Build Docker image
-        run: docker build . --file Dockerfile --tag starkingdoms:$(date +%s)
+        run: docker build --file Dockerfile --tag starkingdoms:latest .
 
       # Step 4: Save Docker image as a tarball
       - name: Save Docker image as tarball
