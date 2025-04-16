@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Build and Upload Docker Image on Release
 
 on:
   release:
