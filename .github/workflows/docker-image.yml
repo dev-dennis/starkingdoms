@@ -26,11 +26,23 @@ jobs:
       - name: Build Docker image
         run: docker build --file Dockerfile --tag starkingdoms:latest .
 
-      # Step 4: Save Docker image as a tarball
+      # Step 4: Tag the Docker image with the repository name and version
+      - name: Tag Docker image
+        run: |
+          docker tag starkingdoms:latest ${{ secrets.DOCKER_REPO }}/starkingdoms:latest
+          docker tag starkingdoms:latest ${{ secrets.DOCKER_REPO }}/starkingdoms:${{ github.run_number }}
+
+      # Step 5: Push the Docker image to the repository
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKER_REPO }}/starkingdoms:latest
+          docker push ${{ secrets.DOCKER_REPO }}/starkingdoms:${{ github.run_number }}
+
+      # Step 6: Save Docker image as a tarball
       - name: Save Docker image as tarball
         run: docker save starkingdoms:latest -o starkingdoms.tar
 
-      # Step 5: Upload Docker image tarball to release
+      # Step 7: Upload Docker image tarball to release
       - name: Upload Docker image to release
         uses: actions/upload-release-asset@v1
         env:
