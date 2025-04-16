@@ -37,11 +37,11 @@ jobs:
       # Step 5: Tag the Docker image with the repository name and version
       - name: Tag Docker image
         run: |
-          docker tag starkingdoms:latest ${{ DOCKER_REPO }}/starkingdoms:latest
-          docker tag starkingdoms:latest ${{ DOCKER_REPO }}/starkingdoms:${{ github.run_number }}
+          docker tag starkingdoms:latest ${{ secrets.DOCKER_REPO }}/starkingdoms:latest
+          docker tag starkingdoms:latest ${{ secrets.DOCKER_REPO }}/starkingdoms:${{ github.run_number }}
 
       # Step 6: Push the Docker image to the repository
       - name: Push Docker image
         run: |
-          docker push ${{ DOCKER_REPO }}/starkingdoms:latest
-          docker push ${{ DOCKER_REPO }}/starkingdoms:${{ github.run_number }}
+          docker push ${{ secrets.DOCKER_REPO }}/starkingdoms:latest
+          docker push ${{ secrets.DOCKER_REPO }}/starkingdoms:${{ github.run_number }}
