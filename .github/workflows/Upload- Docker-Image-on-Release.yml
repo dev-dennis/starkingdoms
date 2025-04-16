@@ -24,23 +24,23 @@ jobs:
 
       # Step 3: Build the Docker image
       - name: Build Docker image
-        run: docker build --file Dockerfile --tag starkingdoms:latest .
+        run: docker build --file Dockerfile --tag ${{ github.repository }}-${{ github.event.release.name }}:latest .
 
       # Step 4: Tag the Docker image with the repository name and version
       - name: Tag Docker image
         run: |
-          docker tag starkingdoms:latest ${{ secrets.DOCKER_REPO }}:latest
-          docker tag starkingdoms:latest ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}
+          docker tag ${{ github.repository }}-${{ github.event.release.name }}:latest ${{ secrets.DOCKER_USERNAME }}/${{ github.repository }}:latest
+          docker tag ${{ github.repository }}-${{ github.event.release.name }}:latest ${{ secrets.DOCKER_USERNAME }}/${{ github.repository }}:${{ github.event.release.name }}
 
       # Step 5: Push the Docker image to the repository
       - name: Push Docker image
         run: |
-          docker push ${{ secrets.DOCKER_REPO }}:latest
-          docker push ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ github.repository }}:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ github.repository }}:${{ github.event.release.name }}
 
       # Step 6: Save Docker image as a tarball
       - name: Save Docker image as tarball
-        run: docker save starkingdoms:latest -o starkingdoms.tar
+        run: docker save ${{ github.repository }}-${{ github.event.release.name }}:latest -o ${{ github.repository }}-${{ github.event.release.name }}.tar
 
       # Step 7: Upload Docker image tarball to release
       - name: Upload Docker image to release
@@ -49,6 +49,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./starkingdoms.tar
-          asset_name: starkingdoms.tar
+          asset_path: ./${{ github.repository }}-${{ github.event.release.name }}.tar
+          asset_name: ${{ github.repository }}-${{ github.event.release.name }}.tar
           asset_content_type: application/x-tar
