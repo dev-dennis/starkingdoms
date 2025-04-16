@@ -1,4 +1,4 @@
-name: Build and Upload JAR on Release
+name: Upload JAR on Release
 
 on:
   release:
